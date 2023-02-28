@@ -275,7 +275,7 @@ public class AdUtil {
         }
     }
 
-    private boolean isAdTimeOut(long timestamp) {
+    public boolean isAdTimeOut(long timestamp) {
         if (System.currentTimeMillis() - timestamp <= 60 * 60 * 1000) {
             return false;
         } else {

@@ -52,6 +52,8 @@ public class SplashActivity extends Activity {
         } else {
             isFirstLaunch = false;
             privacyLayout.setVisibility(View.GONE);
+            LogUtil.d("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            AdUtil.getInstance().checkAllAdCache(this);
             initTimer();
         }
     }

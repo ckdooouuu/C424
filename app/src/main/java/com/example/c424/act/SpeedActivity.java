@@ -109,7 +109,6 @@ public class SpeedActivity extends Activity {
     protected void onResume() {
         super.onResume();
         if (App.app.isNeedUpdateNativeAd) {
-            removeNativeAd();
             App.app.isNeedUpdateNativeAd = false;
             ShowAdUtil.showReportAd(SpeedActivity.this, nativeAdLayout);
         }

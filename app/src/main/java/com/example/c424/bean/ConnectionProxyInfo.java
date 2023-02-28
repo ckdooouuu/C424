@@ -5,7 +5,7 @@ import java.util.List;
 public class ConnectionProxyInfo {
     private int auto;
     private int p_link;
-    private String proxyIp;//节点IP
+    private String proxIp;//节点IP
     private String couServers;//节点国家
     private String webAlias;//节点别名
     private List<ConnectionResult> knotInfo;
@@ -14,10 +14,10 @@ public class ConnectionProxyInfo {
 
     }
 
-    public ConnectionProxyInfo(int auto, int p_link, String proxyIp, String couServers, String webAlias, List<ConnectionResult> knotInfo) {
+    public ConnectionProxyInfo(int auto, int p_link, String proxIp, String couServers, String webAlias, List<ConnectionResult> knotInfo) {
         this.auto = auto;
         this.p_link = p_link;
-        this.proxyIp = proxyIp;
+        this.proxIp = proxIp;
         this.couServers = couServers;
         this.webAlias = webAlias;
         this.knotInfo = knotInfo;
@@ -39,12 +39,12 @@ public class ConnectionProxyInfo {
         this.p_link = p_link;
     }
 
-    public String getProxyIp() {
-        return proxyIp;
+    public String getProxIp() {
+        return proxIp;
     }
 
-    public void setProxyIp(String proxyIp) {
-        this.proxyIp = proxyIp;
+    public void setProxIp(String proxIp) {
+        this.proxIp = proxIp;
     }
 
     public String getCouServers() {
@@ -76,7 +76,7 @@ public class ConnectionProxyInfo {
         return "ConnectionProxyInfo{" +
                 "auto=" + auto +
                 ", p_link=" + p_link +
-                ", proxyIp='" + proxyIp + '\'' +
+                ", proxyIp='" + proxIp + '\'' +
                 ", couServers='" + couServers + '\'' +
                 ", webAlias='" + webAlias + '\'' +
                 ", knotInfo=" + knotInfo +

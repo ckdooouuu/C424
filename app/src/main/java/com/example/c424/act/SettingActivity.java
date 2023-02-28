@@ -56,6 +56,7 @@ public class SettingActivity extends Activity {
                 startActivity(new Intent(SettingActivity.this, FeedbackActivity.class));
                 break;
             case R.id.privacyLayout:
+                startActivity(new Intent(SettingActivity.this, PrivacyActivity.class));
                 break;
         }
     }

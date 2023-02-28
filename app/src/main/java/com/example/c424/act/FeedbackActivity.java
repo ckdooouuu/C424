@@ -39,6 +39,7 @@ public class FeedbackActivity extends Activity {
     TextView typeTv;
 
     private String type;
+    FeedbackDialog feedbackDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,11 +68,26 @@ public class FeedbackActivity extends Activity {
         typeTv.setText(spannableString);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (feedbackDialog != null) {
+            if (feedbackDialog.isShowing()) {
+                feedbackDialog.dismiss();
+            }
+        }
+        finish();
+    }
+
     @OnClick({R.id.backBtn, R.id.sendBtn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.backBtn:
                 feedbackTypeGroup.clearCheck();
+                if (feedbackDialog != null) {
+                    if (feedbackDialog.isShowing()) {
+                        feedbackDialog.dismiss();
+                    }
+                }
                 finish();
                 break;
             case R.id.sendBtn:
@@ -81,15 +97,19 @@ public class FeedbackActivity extends Activity {
     }
 
     private void checkNetworkUse() {
+        sendBtn.setClickable(false);
+        sendBtn.setEnabled(false);
         boolean isAvailable = NetworkUtil.checkNetworkAvailable(this);
         if (isAvailable) {
             uploadFeedback();
         } else {
-            FeedbackDialog feedbackDialog = new FeedbackDialog(this, false);
+            feedbackDialog = new FeedbackDialog(this, false);
             feedbackDialog.show();
             feedbackDialog.setClickPositiveListener(new FeedbackDialog.ClickPositiveListener() {
                 @Override
                 public void onClick() {
+                    sendBtn.setClickable(true);
+                    sendBtn.setEnabled(true);
                     checkNetworkUse();
                 }
             });
@@ -107,11 +127,13 @@ public class FeedbackActivity extends Activity {
             public void onError(String errorMsg) {
                 LogUtil.d("uploadFeedback errorMsg:" + errorMsg);
 
-                FeedbackDialog feedbackDialog = new FeedbackDialog(FeedbackActivity.this, false);
+                feedbackDialog = new FeedbackDialog(FeedbackActivity.this, false);
                 feedbackDialog.show();
                 feedbackDialog.setClickPositiveListener(new FeedbackDialog.ClickPositiveListener() {
                     @Override
                     public void onClick() {
+                        sendBtn.setClickable(true);
+                        sendBtn.setEnabled(true);
                         checkNetworkUse();
                     }
                 });
@@ -121,11 +143,15 @@ public class FeedbackActivity extends Activity {
             public void onSuccess(ResponseBean responseBean) {
                 LogUtil.d("uploadFeedback response:" + responseBean.toString());
                 if (responseBean.getReturnCode() == 200) {
-                    FeedbackDialog feedbackDialog = new FeedbackDialog(FeedbackActivity.this, true);
+                    sendBtn.setClickable(true);
+                    sendBtn.setEnabled(true);
+                    feedbackDialog = new FeedbackDialog(FeedbackActivity.this, true);
                     feedbackDialog.show();
                     feedbackDialog.setClickPositiveListener(new FeedbackDialog.ClickPositiveListener() {
                         @Override
                         public void onClick() {
+                            sendBtn.setClickable(true);
+                            sendBtn.setEnabled(true);
                             sendBtn.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -135,11 +161,14 @@ public class FeedbackActivity extends Activity {
                         }
                     });
                 } else {
-                    FeedbackDialog feedbackDialog = new FeedbackDialog(FeedbackActivity.this, false);
+                    feedbackDialog = new FeedbackDialog(FeedbackActivity.this, false);
                     feedbackDialog.show();
                     feedbackDialog.setClickPositiveListener(new FeedbackDialog.ClickPositiveListener() {
                         @Override
                         public void onClick() {
+
+                            sendBtn.setClickable(true);
+                            sendBtn.setEnabled(true);
                             checkNetworkUse();
                         }
                     });

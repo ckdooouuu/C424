@@ -25,8 +25,8 @@
 
         <activity
             android:name=".act.SplashActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,21 +37,32 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".act.MainActivity"
+        <activity
+            android:name=".act.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".act.SettingActivity"
+        <activity
+            android:name=".act.SettingActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".act.FeedbackActivity"
+        <activity
+            android:name=".act.FeedbackActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".act.SpeedActivity"
+        <activity
+            android:name=".act.SpeedActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".act.LocationActivity"
+        <activity
+            android:name=".act.LocationActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".act.FaqActivity"
+        <activity
+            android:name=".act.FaqActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".act.ReportActivity"
+        <activity
+            android:name=".act.ReportActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".act.ProxyListActivity"
+        <activity
+            android:name=".act.ProxyListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".act.PrivacyActivity"
             android:screenOrientation="portrait" />
     </application>
 

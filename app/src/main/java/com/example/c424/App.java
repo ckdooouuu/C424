@@ -28,10 +28,14 @@ import com.example.c424.utils.LogUtil;
 import com.example.c424.utils.PingUtil;
 import com.example.c424.utils.SpUtil;
 import com.example.c424.view.MyRefreshHeader;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
@@ -82,75 +86,59 @@ public class App extends ICSOpenVPNApplication {
 
         app = this;
 
-        //设置全局的下拉刷新样式
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            LogUtil.d("AAAAAAAAAAA");
             if (getProcessName().equals(getPackageName())) {
-                LogUtil.d("BBBBBBBBBBBBB");
-//                LogUtil.d("++++++++++++++++++++++++++++");
-//
-                registerLifecycle();
-                getLocation();
-                getGlobalConfig();
-                getProxyList();
-
-                MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                    @Override
-                    public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-
-                    }
-                });
-                AdUtil.getInstance().initAdListener();
-                if (!SpUtil.isFirstLaunch(app)) {
-                    AdUtil.getInstance().checkAllAdCache(app);
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            GoogleIdUtil.getGoogleAdId(App.this);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            LogUtil.d("getGoogleAdId Exception:" + e.getMessage());
-                        }
-                    }
-                }).start();
+                initApp();
             } else {
-                LogUtil.d("CCCCCCCCCCC");
                 WebView.setDataDirectorySuffix("ads_dir");
             }
         } else {
-            LogUtil.d("DDDDDDDDDDDD");
-            registerLifecycle();
-            getLocation();
-            getGlobalConfig();
-            getProxyList();
-            MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+            initApp();
+        }
+    }
 
-                }
-            });
-            AdUtil.getInstance().initAdListener();
-            if (!SpUtil.isFirstLaunch(app)) {
-                AdUtil.getInstance().checkAllAdCache(app);
-            }
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        GoogleIdUtil.getGoogleAdId(App.this);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        LogUtil.d("getGoogleAdId Exception:" + e.getMessage());
-                    }
-                }
-            }).start();
+    private void initApp() {
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        FirebaseCrashlytics firebaseCrashlytics = FirebaseCrashlytics.getInstance();
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+        if (!BuildConfig.DEBUG) {
+            firebaseCrashlytics.setCrashlyticsCollectionEnabled(true);
+        } else {
+            firebaseCrashlytics.setCrashlyticsCollectionEnabled(false);
         }
 
+//        FacebookSdk.setApplicationId("");//TODO
+//        FacebookSdk.sdkInitialize(App.app);
+//        AppEventsLogger.activateApp(this);
+//        FacebookSdk.setClientToken("");//TODO
+//        FacebookSdk.setAutoLogAppEventsEnabled(true);
 
+        registerLifecycle();
+        getLocation();
+        getGlobalConfig();
+        getProxyList();
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+
+            }
+        });
+        AdUtil.getInstance().initAdListener();
+        if (!SpUtil.isFirstLaunch(app)) {
+            AdUtil.getInstance().checkAllAdCache(app);
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    GoogleIdUtil.getGoogleAdId(App.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LogUtil.d("getGoogleAdId Exception:" + e.getMessage());
+                }
+            }
+        }).start();
     }
 
     private void getLocation() {

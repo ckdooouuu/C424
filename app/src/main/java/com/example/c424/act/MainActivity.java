@@ -34,6 +34,7 @@ import com.example.c424.R;
 import com.example.c424.bean.ConnectType;
 import com.example.c424.bean.ConnectionProxyInfo;
 import com.example.c424.bean.ConnectionResult;
+import com.example.c424.bean.GlobalConfig;
 import com.example.c424.bean.ProxyInfo;
 import com.example.c424.bean.ReqUploadConnectionResult;
 import com.example.c424.bean.ResponseBean;
@@ -50,8 +51,9 @@ import com.example.c424.utils.ad.AdUtil;
 import com.example.c424.utils.ad.ShowAdUtil;
 import com.example.c424.view.ProxyDialog;
 import com.example.c424.view.UpgradeDialog;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.nativead.NativeAdView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.network.crypt.NativeLib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable singleConnectTimeout = new Runnable() {
         @Override
         public void run() {
-            uploadConnectResult(1, currentConnectStrategy, Integer.parseInt(currentConnectPort));
+            uploadConnectResult(1, currentConnectStrategy, currentConnectPort);
             judgeIsReconnectByLastStrategy();
         }
     };
@@ -192,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         initFlag(secondFlag, "BR");
         initFlag(thirdFlag, "IE");
         initFlag(fourthFlag, "IL");
+
     }
 
     @Override
@@ -199,8 +202,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (App.app.isNeedUpdateNativeAd) {
             App.app.isNeedUpdateNativeAd = false;
-            removeBannerAd();
-            removeNativeAd();
             ShowAdUtil.showHomeAd(MainActivity.this, nativeAdLayout, bannerAdLayout);
         }
         if (App.app.isNeedShowUpgradeDialog) {
@@ -232,26 +233,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void removeBannerAd() {
-        if (bannerAdLayout != null) {
-            if (bannerAdLayout.getChildCount() > 0) {
-                AdView adView = (AdView) bannerAdLayout.getChildAt(0);
-                adView.destroy();
-                bannerAdLayout.removeAllViews();
-            }
-        }
-    }
-
-    private void removeNativeAd() {
-        if (nativeAdLayout != null) {
-            if (nativeAdLayout.getChildCount() > 0) {
-                NativeAdView nativeAdView = (NativeAdView) nativeAdLayout.getChildAt(0);
-                nativeAdView.destroy();
-                nativeAdLayout.removeAllViews();
-            }
-        }
-    }
-
     private void initConnectListener() {
         VpnStatus.connectStatusListener = new VpnStatus.ConnectStatusListener() {
             @Override
@@ -267,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
                             //上报连接结果
                             LogUtil.d("currentConnectPort:" + currentConnectPort);
-                            uploadConnectResult(0, currentConnectStrategy, Integer.parseInt(currentConnectPort));
+                            uploadConnectResult(0, currentConnectStrategy, currentConnectPort);
 
                             jumpToReport(true);
                         } else if (level == ConnectionStatus.LEVEL_NOTCONNECTED) {
@@ -281,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
                                     judgeIsReconnectByLastStrategy();
 
                                     //上报连接结果
-                                    uploadConnectResult(1, currentConnectStrategy, Integer.parseInt(currentConnectPort));
+                                    uploadConnectResult(1, currentConnectStrategy, currentConnectPort);
                                 }
                             }
                         }
@@ -318,13 +299,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.currentProxyFlag:
-//                if (App.app.proxyInfoList != null && App.app.proxyInfoList.size() > 0) {
-                    if (ConnectStatusUtil.getInstance().getStatus() != Constant.CONNECTING) {
-                        Intent intent = new Intent(MainActivity.this, ProxyListActivity.class);
-                        intent.putExtra("selectIndex", currentSelectedProxyIndex);
-                        startActivityForResult(intent, 5000);
-                    }
-//                }
+                if (ConnectStatusUtil.getInstance().getStatus() != Constant.CONNECTING) {
+                    Intent intent = new Intent(MainActivity.this, ProxyListActivity.class);
+                    intent.putExtra("selectIndex", currentSelectedProxyIndex);
+                    startActivityForResult(intent, 5000);
+                }
                 break;
             case R.id.unConnectAnimation:
                 if (App.app.proxyCountryList != null && App.app.proxyCountryList.size() > 0 && currentProxyInfo != null) {
@@ -641,18 +620,19 @@ public class MainActivity extends AppCompatActivity {
     /**
      * @param result 0成功   1失败
      */
-    private void uploadConnectResult(int result, int connectStrategy, int port) {
+    private void uploadConnectResult(int result, int connectStrategy, String port) {
+        LogUtil.d("port::::::" + port);
         long connectInterval = System.currentTimeMillis() - startConnectTimeStamp;
         //
         ConnectionProxyInfo connectionProxyInfo = new ConnectionProxyInfo();
         connectionProxyInfo.setAuto(connectStrategy);
         connectionProxyInfo.setP_link((int) currentProxyInfo.getDelay());
-        connectionProxyInfo.setProxyIp(currentProxyInfo.getHostServer());
+        connectionProxyInfo.setProxIp(currentProxyInfo.getHostServer());
         connectionProxyInfo.setCouServers(currentProxyInfo.getWeb_cou());
         connectionProxyInfo.setWebAlias(currentProxyInfo.getWebAlias());
         //
         ConnectionResult connectionResult = new ConnectionResult();
-        connectionResult.setPoint(port);
+        connectionResult.setPoint(Integer.parseInt(port));
         connectionResult.setLinkStatus(result);
         connectionResult.setLinkTimes(connectInterval);
         connectionResult.setJoinType(connectStrategy);

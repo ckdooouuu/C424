@@ -75,21 +75,10 @@ public class LocationActivity extends Activity {
         }
     }
 
-    private void removeNativeAd() {
-        if (nativeAdLayout != null) {
-            if (nativeAdLayout.getChildCount() > 0) {
-                NativeAdView nativeAdView = (NativeAdView) nativeAdLayout.getChildAt(0);
-                nativeAdView.destroy();
-                nativeAdLayout.removeAllViews();
-            }
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         if (App.app.isNeedUpdateNativeAd) {
-            removeNativeAd();
             App.app.isNeedUpdateNativeAd = false;
             ShowAdUtil.showReportAd(LocationActivity.this, nativeAdLayout);
         }
