@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="54dp"
+    android:layout_marginEnd="5dp"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/firstFlag"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="75dp"
+            android:background="@drawable/bg_flag"
+            android:padding="8dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/secondFlag"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_flag"
+            android:padding="8dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/currentProxyFlag"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/bg_current_proxy"
+            android:padding="8dp" />
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_below="@id/currentProxyFlag"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/white_point" />
+
+    </RelativeLayout>
+
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_weight="1">-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/currentProxyFlag"-->
+    <!--            android:layout_width="65dp"-->
+    <!--            android:layout_height="65dp"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:padding="8dp"-->
+    <!--            android:background="@drawable/bg_current_proxy" />-->
+
+    <!--        <View-->
+    <!--            android:layout_width="5dp"-->
+    <!--            android:layout_height="5dp"-->
+    <!--            android:layout_below="@id/currentProxyFlag"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:layout_marginTop="5dp"-->
+    <!--            android:background="@drawable/white_point" />-->
+
+    <!--    </RelativeLayout>-->
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/thirdFlag"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_flag"
+            android:padding="8dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/fourthFlag"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="75dp"
+            android:background="@drawable/bg_flag"
+            android:padding="8dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>
