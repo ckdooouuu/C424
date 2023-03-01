@@ -61,4 +61,13 @@
     <string name="upgrade">Upgrade</string>
     <string name="guide_content">Click here to start connecting</string>
     <string name="reconnect2">Reconnect</string>
+    <string name="splash_privacy">your privacy is important
+
+Please read this policy and the terms and conditions carefully. By choosing to use our services, we may collect the data mentioned in the policy. You confirm that you have read this privacy policy and agree to be bound by it. If you do not agree to the terms of this privacy policy rules, please do not use our services.
+We do not collect any personal information, but for a better user experience, we will collect the following information:
+1. We may collect location information, and select the best server node for you by obtaining the approximate location, so that you can get a better web browsing experience.
+2. We may collect information such as your connection number or connection duration in order to increase connection speed and improve product experience
+3. We may collect your interaction data to optimize our UI interaction experience and product design.
+
+See our Privacy Policy for details.</string>
 </resources>
