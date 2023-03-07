@@ -1,6 +1,7 @@
 package com.example.c424;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -87,31 +88,51 @@ public class App extends ICSOpenVPNApplication {
         app = this;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            LogUtil.d("getPackageName:" + getPackageName() + "    " + getProcessName());
             if (getProcessName().equals(getPackageName())) {
                 initApp();
             } else {
                 WebView.setDataDirectorySuffix("ads_dir");
             }
         } else {
-            initApp();
+            String processName = getProcessName2(this, android.os.Process.myPid());
+            LogUtil.d("processName:" + processName + "    " + getPackageName());
+            if (processName.equals(getPackageName())) {
+                initApp();
+            }
         }
     }
 
+    public static String getProcessName2(Context cxt, int pid) {
+        ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
+        if (runningApps == null) {
+            return null;
+        }
+        for (ActivityManager.RunningAppProcessInfo procInfo : runningApps) {
+            if (procInfo.pid == pid) {
+                return procInfo.processName;
+            }
+        }
+        return null;
+    }
+
     private void initApp() {
+        LogUtil.d("0000000000000000000000");
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         FirebaseCrashlytics firebaseCrashlytics = FirebaseCrashlytics.getInstance();
         firebaseAnalytics.setAnalyticsCollectionEnabled(true);
         if (!BuildConfig.DEBUG) {
             firebaseCrashlytics.setCrashlyticsCollectionEnabled(true);
         } else {
-            firebaseCrashlytics.setCrashlyticsCollectionEnabled(false);
+            firebaseCrashlytics.setCrashlyticsCollectionEnabled(true);
         }
 
-//        FacebookSdk.setApplicationId("");//TODO
-//        FacebookSdk.sdkInitialize(App.app);
-//        AppEventsLogger.activateApp(this);
-//        FacebookSdk.setClientToken("");//TODO
-//        FacebookSdk.setAutoLogAppEventsEnabled(true);
+        FacebookSdk.setApplicationId("624014406226892");//TODO
+        FacebookSdk.sdkInitialize(this);
+        AppEventsLogger.activateApp(this);
+        FacebookSdk.setClientToken("e2884b0d12303a324a0e8833ad09e4dd");//TODO
+        FacebookSdk.setAutoLogAppEventsEnabled(true);
 
         registerLifecycle();
         getLocation();
@@ -242,70 +263,73 @@ public class App extends ICSOpenVPNApplication {
     }
 
     private void registerLifecycle() {
-        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
-            @Override
-            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+                @Override
+                public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                }
 
-            @Override
-            public void onActivityStarted(Activity activity) {
-                activityCount++;
-                isBackground = false;
-                LogUtil.d("onActivityStarted activity:" + activity.getComponentName().getClassName() + "    " + activityCount);
+                @Override
+                public void onActivityStarted(Activity activity) {
+                    activityCount++;
+                    isBackground = false;
+                    LogUtil.d("onActivityStarted activity:" + activity.getComponentName().getClassName() + "    " + activityCount);
 
-                if (activityCount == 1) {
-                    if (!activity.getComponentName().getClassName().contains("SplashActivity")) {
-                        isNeedUpdateNativeAd = false;
-                        LogUtil.d("热启动 打开启动页");
-                        Intent intent = new Intent(activity, SplashActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    } else {
-                        if (lastActivityName != null) {
-                            if (lastActivityName.contains("AdActivity")) {
-                                LogUtil.d("热启动 关闭了广告页，打开启动页");
+                    if (activityCount == 1) {
+                        if (!activity.getComponentName().getClassName().contains("SplashActivity")) {
+                            isNeedUpdateNativeAd = false;
+                            LogUtil.d("热启动 打开启动页");
+                            Intent intent = new Intent(activity, SplashActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        } else {
+                            if (lastActivityName != null) {
+                                if (lastActivityName.contains("AdActivity")) {
+                                    LogUtil.d("热启动 关闭了广告页，打开启动页");
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            @Override
-            public void onActivityResumed(Activity activity) {
+                @Override
+                public void onActivityResumed(Activity activity) {
 
-            }
+                }
 
-            @Override
-            public void onActivityPaused(Activity activity) {
+                @Override
+                public void onActivityPaused(Activity activity) {
 
-            }
+                }
 
-            @Override
-            public void onActivityStopped(Activity activity) {
-                LogUtil.d("onActivityStopped activity:" + activity.getComponentName().getClassName());
-                activityCount--;
-                if (activityCount <= 0) {
-                    isBackground = true;
-                    LogUtil.d("后台");
-//                    isBackground = true;
-                    lastActivityName = activity.getComponentName().getClassName();
-                    if (activity instanceof AdActivity) {
-                        LogUtil.d("关闭广告页");
-                        activity.finish();
-                    } else if (activity instanceof SplashActivity) {
-                        activity.finish();
+                @Override
+                public void onActivityStopped(Activity activity) {
+                    LogUtil.d("onActivityStopped activity:" + activity.getComponentName().getClassName());
+                    activityCount--;
+                    if (activityCount <= 0) {
+                        isBackground = true;
+
+                        LogUtil.d("后台");
+                        //                    isBackground = true;
+                        lastActivityName = activity.getComponentName().getClassName();
+                        if (activity instanceof AdActivity) {
+                            LogUtil.d("关闭广告页");
+                            activity.finish();
+                        } else if (activity instanceof SplashActivity) {
+                            activity.finish();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+                @Override
+                public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
 
-            }
+                }
 
-            @Override
-            public void onActivityDestroyed(Activity activity) {
-            }
-        });
+                @Override
+                public void onActivityDestroyed(Activity activity) {
+                }
+            });
+        }
     }
 }

@@ -676,10 +676,14 @@ public class MainActivity extends AppCompatActivity {
                 stopConnect();
             }
             if (interruptDialog != null) {
-                interruptDialog.dismiss();
+                if (interruptDialog.isShowing()) {
+                    interruptDialog.dismiss();
+                }
             }
             if (disconnectDialog != null) {
-                disconnectDialog.dismiss();
+                if (disconnectDialog.isShowing()) {
+                    disconnectDialog.dismiss();
+                }
             }
         }
     }
