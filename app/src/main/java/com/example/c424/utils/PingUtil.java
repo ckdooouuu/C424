@@ -7,6 +7,7 @@ import com.example.c424.App;
 import com.example.c424.bean.ProxyInfo;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -69,19 +70,23 @@ public class PingUtil {
                             }
                         }
                         if (index == proxyInfoList.size() - 1) {
+                            List<ProxyInfo> priorityCountryProxyList2 = new ArrayList<>();
+                            List<ProxyInfo> commonProxyList2 = new ArrayList<>();
                             if (priorityCountryProxyList.size() > 0) {
-                                Collections.sort(priorityCountryProxyList, comparator);
+                                priorityCountryProxyList2.addAll(priorityCountryProxyList);
+                                Collections.sort(priorityCountryProxyList2, comparator);
                             }
                             if (commonProxyList.size() > 0) {
+                                commonProxyList2.addAll(commonProxyList);
                                 Collections.sort(commonProxyList, comparator);
                             }
 
                             App.app.proxyInfoList.clear();
-                            if (priorityCountryProxyList.size() > 0) {
-                                App.app.proxyInfoList.addAll(priorityCountryProxyList);
+                            if (priorityCountryProxyList2.size() > 0) {
+                                App.app.proxyInfoList.addAll(priorityCountryProxyList2);
                             }
-                            if (commonProxyList.size() > 0) {
-                                App.app.proxyInfoList.addAll(commonProxyList);
+                            if (commonProxyList2.size() > 0) {
+                                App.app.proxyInfoList.addAll(commonProxyList2);
                             }
 
                             App.app.proxyCountryList.clear();

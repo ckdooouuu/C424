@@ -123,7 +123,7 @@ public class HomeNativeAdManager {
         if (activity instanceof ReportActivity || activity instanceof SpeedActivity || activity instanceof LocationActivity) {
             nativeAdView.getMediaView().setMediaContent(homeNativeAd.getNativeAd().getMediaContent());
         }
-        if (nativeAdView.getIconView() != null) {
+        if (nativeAdView.getIconView() != null && homeNativeAd.getNativeAd().getIcon() != null) {
             ((ImageView) nativeAdView.getIconView()).setImageDrawable(homeNativeAd.getNativeAd().getIcon().getDrawable());
         }
         ((TextView) nativeAdView.getHeadlineView()).setText(homeNativeAd.getNativeAd().getHeadline());

@@ -107,7 +107,7 @@ public class ReportNativeAdManager {
         if (activity instanceof ReportActivity || activity instanceof SpeedActivity || activity instanceof LocationActivity) {
             nativeAdView.getMediaView().setMediaContent(reportNativeAd.getNativeAd().getMediaContent());
         }
-        if (nativeAdView.getIconView() != null) {
+        if (nativeAdView.getIconView() != null && reportNativeAd.getNativeAd().getIcon() != null) {
             ((ImageView) nativeAdView.getIconView()).setImageDrawable(reportNativeAd.getNativeAd().getIcon().getDrawable());
         }
         ((TextView) nativeAdView.getHeadlineView()).setText(reportNativeAd.getNativeAd().getHeadline());

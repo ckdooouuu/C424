@@ -420,7 +420,9 @@ public class MainActivity extends AppCompatActivity {
     private void checkVPNPermission() {
         continueConnect = false;
         currentConnectStrategyIndex = 0;
-        currentConnectPort = "";
+        if (ConnectStatusUtil.getInstance().getStatus() == Constant.CONNECTING || ConnectStatusUtil.getInstance().getStatus() == Constant.UN_CONNECT) {
+            currentConnectPort = "";
+        }
         ConnectStatusUtil.getInstance().setStatus(Constant.CONNECTING);
         connectStrategyList.clear();
         connectStrategyList.addAll(SpUtil.getConnectType(MainActivity.this));
@@ -626,13 +628,17 @@ public class MainActivity extends AppCompatActivity {
         //
         ConnectionProxyInfo connectionProxyInfo = new ConnectionProxyInfo();
         connectionProxyInfo.setAuto(connectStrategy);
-        connectionProxyInfo.setP_link((int) currentProxyInfo.getDelay());
-        connectionProxyInfo.setProxIp(currentProxyInfo.getHostServer());
-        connectionProxyInfo.setCouServers(currentProxyInfo.getWeb_cou());
-        connectionProxyInfo.setWebAlias(currentProxyInfo.getWebAlias());
+        if (currentProxyInfo != null) {
+            connectionProxyInfo.setP_link((int) currentProxyInfo.getDelay());
+            connectionProxyInfo.setProxIp(currentProxyInfo.getHostServer());
+            connectionProxyInfo.setCouServers(currentProxyInfo.getWeb_cou());
+            connectionProxyInfo.setWebAlias(currentProxyInfo.getWebAlias());
+        }
         //
         ConnectionResult connectionResult = new ConnectionResult();
-        connectionResult.setPoint(Integer.parseInt(port));
+        if (!port.isEmpty()) {
+            connectionResult.setPoint(Integer.parseInt(port));
+        }
         connectionResult.setLinkStatus(result);
         connectionResult.setLinkTimes(connectInterval);
         connectionResult.setJoinType(connectStrategy);

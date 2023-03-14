@@ -34,10 +34,15 @@ public class NetworkUtil {
         NetworkInfo mobileNetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         NetworkInfo wifiNetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        if (mobileNetworkInfo.isConnected()) {
-            return getMobileIp();
-        } else if (wifiNetworkInfo.isConnected()) {
-            return getWifiIp(context);
+        if (mobileNetworkInfo != null) {
+            if (mobileNetworkInfo.isConnected()) {
+                return getMobileIp();
+            }
+        }
+        if (wifiNetworkInfo != null) {
+            if (wifiNetworkInfo.isConnected()) {
+                return getWifiIp(context);
+            }
         }
         return "";
     }
